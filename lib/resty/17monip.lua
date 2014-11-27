@@ -181,7 +181,7 @@ function _M.query(self, ip)
     end
 
     local data_offset = offset + index_offset - 1024
-    local raw = data:sub(data_offset, data_offset + index_length)
+    local raw = data:sub(data_offset + 1, data_offset + index_length)
 
     return _decode(raw)
 end
