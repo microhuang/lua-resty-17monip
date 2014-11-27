@@ -21,13 +21,13 @@ server {
 
     init_by_lua '
         local monip = require "resty.17monip"
-        iploacter = monip:new{ datfile = "t/17monipdb.dat" }
+        iplocater = monip:new{ datfile = "t/17monipdb.dat" }
     ';
 
     location /t {
         content_by_lua '
-            local iploacter = iploacter
-            local res, err = iploacter:query("115.216.25.67")
+            local iplocater = iplocater
+            local res, err = iplocater:query("115.216.25.67")
             if not res then
                 ngx.say(err)
                 return

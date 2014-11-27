@@ -14,10 +14,10 @@ our $HttpConfig = qq{
 
     init_by_lua '
         local monip = require "resty.17monip"
-        iploacter = monip:new{ datfile = "t/17monipdb.dat" }
+        iplocater = monip:new{ datfile = "t/17monipdb.dat" }
 
         local ipdb = ngx.shared.ipdb
-        ipdb:set("17monipdb", iploacter.index_buffer)
+        ipdb:set("17monipdb", iplocater.index_buffer)
     ';
 };
 
@@ -30,18 +30,24 @@ __DATA__
 --- config
     location = /t {
         content_by_lua '
-            local iploacter = iploacter
-            local res, err = iploacter:query("115.216.25.67")
-            if not res then
-                ngx.say(err)
-                return
+            local iplocater = iplocater
+
+            local t = {"127.0.0.1", "115.216.25.67"}
+
+            for i=1, #t, 1 do
+                local res, err = iplocater:query(t[i])
+                if not res then
+                    ngx.say(err)
+                    return
+                end
+                ngx.say(res[1], " ", res[2], " ", res[3])
             end
-            ngx.say(res[1], " ", res[2], " ", res[3])
         ';
     }
 --- request
     GET /t
 --- response_body
+本机地址 本机地址 nil
 中国 浙江 宁波
 --- no_error_log
 [error]
@@ -53,17 +59,17 @@ __DATA__
 --- config
     location = /t {
         content_by_lua '
-            local iploacter = iploacter
+            local iplocater = iplocater
 
             local ipdb = ngx.shared.ipdb
             local data = ipdb:get("17monipdb")
-            local ok, err = iploacter:update{ data = data }
+            local ok, err = iplocater:update{ data = data }
             if not ok then
                 ngx.say(err)
                 return
             end
 
-            local res, err = iploacter:query("112.112.1.1")
+            local res, err = iplocater:query("112.112.1.1")
             if not res then
                 ngx.say(err)
                 return
@@ -85,9 +91,9 @@ invalid db format
 --- config
     location = /t {
         content_by_lua '
-            local iploacter = iploacter
+            local iplocater = iplocater
 
-            local res, err = iploacter:query("112.112.1.a")
+            local res, err = iplocater:query("112.112.1.a")
             if not res then
                 ngx.say(err)
                 return
