@@ -40,15 +40,15 @@ __DATA__
                     ngx.say(err)
                     return
                 end
-                ngx.say(res[1], " ", res[2], " ", res[3])
+                ngx.say(res[1], " ", res[2], " ", res[3], "$")
             end
         ';
     }
 --- request
     GET /t
 --- response_body
-本机地址 本机地址 nil
-中国 浙江 宁波
+本机地址 本机地址 $
+中国 浙江 宁波$
 --- no_error_log
 [error]
 [warn]

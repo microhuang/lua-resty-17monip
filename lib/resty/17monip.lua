@@ -5,7 +5,8 @@ local bit = require "bit"
 local lshift = bit.lshift
 local insert = table.insert
 local str_byte = string.byte
-local str_gsub = string.gsub
+local str_find = string.find
+local str_gfind = string.gfind
 local ngx_match = ngx.re.match
 
 
@@ -33,10 +34,19 @@ local DB_FORMAT_ERR = "invalid db format"
 
 
 local function _decode(raw)
+    local delim = '\t'
+    if str_find(raw, delim) == nil then
+        return { raw }
+    end
+
     local t = {}
-    str_gsub(raw, "([^\t]+)", function (s)
-                 return insert(t, s)
-    end)
+    local epos = 0
+    for part, pos in str_gfind(raw, "(.-)" .. delim .. "()") do
+        insert(t, part)
+        epos = pos
+    end
+
+    insert(t, raw:sub(epos))
     return t
 end
 
