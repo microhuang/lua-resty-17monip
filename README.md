@@ -15,14 +15,14 @@ IP query based on [17mon.cn](http://tool.17mon.cn/), the best IP database for Ch
 ````lua
 lua_package_path "/path/to/lua-resty-17monip/lib/?.lua;;";
 
+init_by_lua '
+    local monip = require "resty.17monip"
+    iplocater = monip:new{ datfile = "t/17monipdb.dat" }
+';
+
 server {
 
     listen 9090;
-
-    init_by_lua '
-        local monip = require "resty.17monip"
-        iplocater = monip:new{ datfile = "t/17monipdb.dat" }
-    ';
 
     location /t {
         content_by_lua '
