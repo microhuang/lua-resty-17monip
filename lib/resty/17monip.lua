@@ -7,7 +7,8 @@ local insert = table.insert
 local str_byte = string.byte
 local str_find = string.find
 local str_gfind = string.gfind
-local ngx_match = ngx.re.match
+
+local ngx_match = ngx.re.match     --ngx.re.find相比ngx.re.match，不会创建新的Lua字符串，也不会创建新的Lua Table，因此，该方法比ngx.re.match更加高效，因此，在可以使用ngx.re.find的地方应该尽量使用。
 
 
 local _M = { _VERSION = "0.01" }
